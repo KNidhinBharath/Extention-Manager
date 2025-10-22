@@ -6,9 +6,14 @@ const Cards = ({status}) => {
   const [info,setInfo] = useState([])
   
   useEffect(() => {
-    const savedData = JSON.parse(localStorage.getItem("details"))
-    
-      async function onLoad() {
+    const savedData = JSON.parse(localStorage.getItem("details")) 
+
+    if(savedData) {
+      setInfo(savedData)
+    }
+
+    else{
+       async function onLoad() {
       try {
         const response = await fetch('/data.json')
         if(!response.ok) {
@@ -23,6 +28,7 @@ const Cards = ({status}) => {
       }
         onLoad() 
      
+    }     
  
  },[])
 
@@ -39,14 +45,19 @@ const Cards = ({status}) => {
           setInfo(filteredData)
         }            
 
- },[status,info])
+ },[status])
 
 
-
-  function handleChange(index) {
-   const updated = info.map((el,i) => i === index ? {...el ,isActive:!el.isActive} :el )
-    setInfo(updated)
+  function handleChange(name) {
+    const recoveredData = JSON.parse(localStorage.getItem("details")) || []
+    const updated = recoveredData.map((el) => el.name === name ? {...el ,isActive:!el.isActive} :el )
     localStorage.setItem("details",JSON.stringify(updated))
+
+    const filtered = updated.filter(el =>
+    status === "All" ? true : status === "Active" ? el.isActive : !el.isActive
+  );
+    setInfo(filtered)
+    
   } 
 
   return (
@@ -98,7 +109,7 @@ const Cards = ({status}) => {
               }}>Remove</button>
 
               <label className="switch">
-                <input type="checkbox" checked = {el.isActive} onChange={() =>handleChange(index)} />                
+                <input type="checkbox" checked = {el.isActive} onChange={() =>handleChange(el.name)} />                
                 <span className="slider round"></span>
                </label>
         </div>
