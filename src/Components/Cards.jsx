@@ -1,42 +1,52 @@
 import React, { useEffect, useState } from 'react'
 import '../../src/toggle.css'
 
-
-const Cards = () => {
-
+const Cards = ({status}) => {
+ 
   const [info,setInfo] = useState([])
-
+  
   useEffect(() => {
-
-    async function onLoad() {
-
+    const savedData = JSON.parse(localStorage.getItem("details"))
+    
+      async function onLoad() {
       try {
         const response = await fetch('/data.json')
         if(!response.ok) {
           throw new Error('Network issue')
         }
-        const data = await response.json()
-        console.log(data) 
+        const data = await response.json()    
         setInfo(data) 
-
-      } catch (error) {
-               
+        localStorage.setItem("details",JSON.stringify(data))           
+      } catch (error) {               
         console.error("Cannot find the data")
+        }    
       }
-
-    
-  }
-
-  onLoad()
-  
+        onLoad() 
+     
+ 
  },[])
+
+ useEffect(()=> {
+  const details = JSON.parse(localStorage.getItem("details"))
+  if(status === "All") {
+          setInfo(details)
+        }
+        else {
+          const filteredData = details.filter((el) => {
+          if(status === "Active") return el.isActive === true
+          if(status === "Inactive") return el.isActive === false
+          })
+          setInfo(filteredData)
+        }            
+
+ },[status,info])
 
 
 
   function handleChange(index) {
-
-    setInfo( 
-      prev => prev.map((el,i) => i === index ? {...el ,isActive:!el.isActive} :el ))
+   const updated = info.map((el,i) => i === index ? {...el ,isActive:!el.isActive} :el )
+    setInfo(updated)
+    localStorage.setItem("details",JSON.stringify(updated))
   } 
 
   return (
@@ -87,9 +97,9 @@ const Cards = () => {
                 padding:"5px"
               }}>Remove</button>
 
-              <label class="switch">
+              <label className="switch">
                 <input type="checkbox" checked = {el.isActive} onChange={() =>handleChange(index)} />                
-                <span class="slider round"></span>
+                <span className="slider round"></span>
                </label>
         </div>
           
