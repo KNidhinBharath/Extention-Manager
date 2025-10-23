@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import '../../src/toggle.css'
+import Modal from 'react-modal'
+
 
 const Cards = ({status}) => {
  
   const [info,setInfo] = useState([])
+  const [isOpen,setIsOpen] = useState(false)
+  const [selectedName ,setSelectedName] = useState("")
+  
   
   useEffect(() => {
     const savedData = JSON.parse(localStorage.getItem("details")) 
@@ -49,16 +54,31 @@ const Cards = ({status}) => {
 
 
   function handleChange(name) {
+
     const recoveredData = JSON.parse(localStorage.getItem("details")) || []
     const updated = recoveredData.map((el) => el.name === name ? {...el ,isActive:!el.isActive} :el )
     localStorage.setItem("details",JSON.stringify(updated))
-
     const filtered = updated.filter(el =>
-    status === "All" ? true : status === "Active" ? el.isActive : !el.isActive
-  );
+    status === "All" ? true : status === "Active" ? el.isActive : !el.isActive );
     setInfo(filtered)
     
   } 
+
+  function handleRemove(name){
+
+    setSelectedName(name)
+    setIsOpen(true)     
+  }
+
+  function confirmRemove() {
+    
+      const data = JSON.parse(localStorage.getItem("details"))
+      const updated = data.filter((el) => el.name !== selectedName)
+      localStorage.setItem("details",JSON.stringify(updated))
+      const filtered = updated.filter(el => status === "All" ? true : status === "Active"? el.isActive : !el.isActive)
+      setInfo(filtered)     
+      setIsOpen(false)
+  }
 
   return (
     
@@ -106,7 +126,9 @@ const Cards = ({status}) => {
               <button style={{
                 borderRadius:"16px",
                 padding:"5px"
-              }}>Remove</button>
+              }} 
+              onClick={() => handleRemove(el.name)}
+              >Remove</button>
 
               <label className="switch">
                 <input type="checkbox" checked = {el.isActive} onChange={() =>handleChange(el.name)} />                
@@ -117,7 +139,31 @@ const Cards = ({status}) => {
         </div>  
         
       ))}
-           
+           <Modal 
+            isOpen = {isOpen}
+            onAfterClose={() => setIsOpen(false)}
+             style={{
+                overlay: { backgroundColor: "rgba(0,0,0,0.6)" },
+                content: {
+                width: "300px",
+                height: "200px",
+                margin: "auto",
+                borderRadius: "10px",
+                textAlign: "center"
+          }
+        }}>
+
+              <h2> Are You Sure ?</h2>
+              <div style={{
+                display:"flex",
+                flexDirection:"row",
+                gap:"10px"
+              }}>
+                <button onClick={() =>confirmRemove() }>Yes</button>
+                <button onClick={() => setIsOpen(false) }>No</button>
+              </div>
+
+           </Modal>
           
     </div>
   )

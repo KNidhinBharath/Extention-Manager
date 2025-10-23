@@ -3,6 +3,7 @@ import MainPage from './Components/MainPage';
 import ExtentionsBar from './Components/ExtentionsBar';
 import { useEffect, useState } from 'react';
 
+
 function App() {
 
   const [darkMode,setDarkMode] = useState(false)
