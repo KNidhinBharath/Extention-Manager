@@ -8,9 +8,12 @@ const ExtentionsBar = ({mode ,setMode}) => {
       justifyContent:"space-between",
       alignItems:"center",
       width:"100%",      
-      padding:"10px 0px",
-      border:"1px solid black",
-      borderRadius:"16px"
+      padding:"8px 0px",  
+      marginBottom:"20px", 
+      backgroundColor: mode ? 'rgba(52, 53, 65, 0.9)' : "white",      
+      borderRadius:"8px",
+      
+      
     }}>
         <div id='logo' 
           style={{
@@ -29,13 +32,18 @@ const ExtentionsBar = ({mode ,setMode}) => {
                   >{ mode ? 
                     (<img src='./assets/images/icon-sun.svg'  
                           alt='light-mode' 
-                          style={{background:"black",
-                            height:"20px"
+                          style={{background:"#1E1E1E",
+                            height:"20px",
+                            padding:"10px",
+                            borderRadius:"8px",
+                            color:"white"
                           }}/>) 
                     :(<img src='./assets/images/icon-moon.svg'  
                           alt='dark-mode'
                           style={{background:"white",
-                            height:"20px"
+                            height:"20px",
+                            padding:"10px",
+                            borderRadius:"8px"
                           }}/>) }
                </div>            
         

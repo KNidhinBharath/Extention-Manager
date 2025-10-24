@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import '../../src/toggle.css'
+import '../../src/index.css'
 import Modal from 'react-modal'
 
 
-const Cards = ({status}) => {
+const Cards = ({mode,setMode,status}) => {
  
   const [info,setInfo] = useState([])
   const [isOpen,setIsOpen] = useState(false)
@@ -84,9 +85,9 @@ const Cards = ({status}) => {
     
     <div id='Card' 
       style={{
-        display:"grid",
-        gridTemplateColumns:"repeat(3,1fr)",
-        gap:"10px"
+        display:"grid",        
+        gap:"10px",
+        
       }}> 
     {
       info.map((el,index) => (
@@ -96,7 +97,7 @@ const Cards = ({status}) => {
         border:"1px solid black",
         borderRadius:"16px",
         padding:"10px",
-          
+        background:  mode ? '#343541' : "white",
        }}>
         <div id='top' 
             

@@ -9,15 +9,16 @@ function App() {
   const [darkMode,setDarkMode] = useState(false)
 
 useEffect(() => {
-  document.body.style.background = darkMode ? " deepskyblue" : "white"
+  document.body.style.background = darkMode ? "linear-gradient(to bottom, #0A0F2C, #1A237E)" : "white"
   document.body.style.color = darkMode ? "white" : "black"
 },[darkMode])
 
 
   return (
 
-    <div style={{
-
+    <div id='Main' 
+      
+    style={{
        width: "80%",             
        margin: "10vh 10%",  
        padding:"10px 10px", 
@@ -25,14 +26,16 @@ useEffect(() => {
        flexDirection:"column",
        alignItems: "center",
        justifyContent: "center",
-       background : darkMode ? "grey" : "white",
+       backgroundColor : darkMode ? "inherit"  : "white",
        
       }}>
 
       <ExtentionsBar 
         mode={darkMode}
         setMode = {() => setDarkMode((prev) => (!prev))} />
-      <MainPage/>
+      <MainPage 
+        mode={darkMode}
+        setMode = {() => setDarkMode((prev) => (!prev))}/>
 
     </div>
   );
